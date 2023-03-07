@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <%- include("partials/head"); %>
+</head>
+
+<body class="container-fluid">
+  <%- include("partials/header"); %>
+
+  <h1>Times on file for <%= swimmerName %>:</h1>
+
+  <!--
+    Render a table with the swimmer's times in each stroke, and at each meet. separate meets by column, stroke by row.
+
+    Params:
+    - eventsArr: an array of objects of the form { eventName: str, eventTimes: [str] }
+    - meetNames: an array of the names of all swim meets hosted this season
+  -->
+  <% if (eventsArr.length === 0) { %>
+    <div>This swimmer does not have any times on file!</div>
+  <% } else { %>
+    <div class="table-responsive">
+      <table class="table table-striped">
+        <thead class="thead-light">
+          <tr>
+            <!-- The top-leftmost space must be empty since below will be events -->
+            <th scope="col">Stroke</th>
+            <% meetNames.forEach(function(meetName) { %>
+              <th class="text-center" scope="col"><%= meetName %></th>
+            <% }); %>
+          </tr>
+        </thead>
+
+        <tbody>
+        <%
+        eventsArr.forEach(function renderEvents(eventObj) { %>
+          <tr>
+            <th scope="row"><%= eventObj.eventName %></th>
+            <%
+            // Empty times are given as '&emdash;', so use - to render it
+            eventObj.eventTimes.forEach(function renderEventTimes(timeEntry) { %>
+              <td class="text-center"><%- timeEntry %></td>
+            <% }); %>
+          </tr>
+        <% }); %>
+        </tbody>
+      </table>
+    </div>
+  <% } %>
+
+  <%- include("partials/footer"); %>
+</body>
+
+</html>
